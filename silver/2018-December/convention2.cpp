@@ -1,85 +1,65 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <map>
-#include <vector>
-#include <array>
-#include <queue>
-#include <algorithm>
-#include <functional>
+#include "bits/stdc++.h"
 
-struct Cow
-{
-    int rank;
-    int a;
-    int t;
+using namespace std;
 
-    bool operator<(const Cow &c) const
-    {
-        return rank > c.rank;
-    }
-};
+priority_queue<array<int, 3>, vector<array<int, 3> >, greater<array<int, 3> > > events, waiting;
+// events format: arrival, duration, rank
+//     duration < 0 if it is ending, = original arrival * -1
+// waiting format: rank, arrival, duration
+int max_wait = 0;
 
-struct Event
-{
-    Event(int _time, Cow &_c, bool _s) : time(_time), c(_c), start(_s) {}
-    int time;
-    Cow &c;
-    bool start;
+void update(const array<int, 3>& ev) {
+    auto& next = waiting.top();
+    cout << "Update: " << ev[0] << " " << ev[1] << ", " << next[1] << endl;
+    int d = ev[0] - next[1]; 
+    if (d > max_wait) max_wait = d;
 
-    bool operator<(const Event &e) const
-    {
-        return time < e.time;
-    }
-};
-
-bool cow_compare(const Cow &lhs, const Cow &rhs)
-{
-    return lhs.a < rhs.a;
+    events.push({ev[0] + next[2], 0, next[0]});
+    waiting.pop();
 }
 
 int main()
 {
-    std::ifstream input("convention2.in");
+    ifstream input("convention2.in");
+    ofstream output("convention2.out");
+
     int n;
     input >> n;
-    Cow *cows = new Cow[n];
-    for (int i = 0; i < n; i++)
-    {
+
+    for (int i = 0; i < n; i++) {
         int a, t;
         input >> a >> t;
-        cows[i].rank = i;
-        cows[i].a = a;
-        cows[i].t = t;
+        events.push({a, t, i});
     }
-    std::sort(cows, cows + n, &cow_compare);
-
-    std::priority_queue<Cow> q;
-    std::priority_queue<Event> events;
+    // while (events.size()) {
+    //     auto& ev = events.top();
+    //     cout << "a: " << ev[0] << " t: " << ev[1] << " rank: " << ev[2] << endl;
+    //     events.pop();
+    // }
 
     bool occupied = false;
-    for (int i = 0; i < n; i++)
-    {
-        events.emplace(cows[i].a, cows[i], true);
-    }
-
-    Cow *current = nullptr;
-    while (!events.empty())
-    {
-        const Event &e = events.top();
-        if (e.start)
-        {
-            q.push(e.c);
-        }
-        else
-        {
-            const Cow &best = q.top();
-
-            q.pop();
-        }
+    while (events.size()) {
+        auto& ev = events.top();
+        cout << "Event - time: " << ev[0] << " duration: " << ev[1] << " rank: " << ev[2] << endl;
+        // if t == 0, it is an end event
+        if (ev[1] == 0) {
+            if (waiting.empty()) {
+                occupied = false;
+            } else {
+                update(ev);
+                occupied = true;
+            }
+        } else {
+            waiting.push({ev[2], ev[0], ev[1]});
+            if (!occupied) {
+                update(ev);
+                occupied = true;
+            }
+        }        
         events.pop();
     }
+    cout << max_wait << endl;
+    output << max_wait;
 
-    delete cows;
     return 0;
 }
