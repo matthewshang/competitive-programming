@@ -4,3 +4,4 @@ build/
 *.in
 *.out
 *.txt
+.DS_Store

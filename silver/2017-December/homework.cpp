@@ -11,7 +11,7 @@ int main() {
     int n;
     int scores[MAX_QS];
     int mins[MAX_QS];
-    int res[MAX_QS];
+    double res[MAX_QS];
 
     in >> n;
     for (int i = 0; i < n; i++) {
@@ -19,23 +19,17 @@ int main() {
     }
 
     int total = scores[n - 1];
-    int max_res = 0;
+    double max_res = 0;
     mins[n - 1] = scores[n - 1];
     for (int i = n - 2; i >= 0; i--) {
         mins[i] = min(mins[i + 1], scores[i]);
         total += scores[i];
-        res[i] = (total - mins[i]) / (n - i - 1);
-        if (res[i] == 197) {
-            cout << "total: " << total << ", n - i - 1: " << n - i - 1 << endl;
-        }
+        res[i] = static_cast<double>(total - mins[i]) / (n - i - 1);
         if (res[i] > max_res) max_res = res[i];
-        // cout << mins[i] << ", ";
     }
-    // cout << endl;
 
-    for (int i = 1; i < n - 2; i++) {
+    for (int i = 1; i <= n - 2; i++) {
         if (res[i] == max_res) {
-            cout << "res[" << i << "]: " << res[i] << ", max: " << max_res << endl;
             out << i << endl;
         }
     }
