@@ -3,19 +3,20 @@
 using namespace std;
 
 struct Node {
-    Node* parent;
+    Node *parent;
     int id;
-    vector<Node*> children;
+    vector<Node *> children;
 
     int color;
     set<int> neighbors;
 
-    Node(int _id) : parent(nullptr), id(_id), color(-1) {};
+    Node(int _id) : parent(nullptr), id(_id), color(-1){};
 
     void print() {
-        cout << "id: " << id << " parent: " << (parent ? parent->id : -1) << " color: " << color << endl;
+        cout << "id: " << id << " parent: " << (parent ? parent->id : -1)
+             << " color: " << color << endl;
         cout << "children: ";
-        for (Node* c : children) {
+        for (Node *c : children) {
             cout << c->id << ", ";
         }
         cout << endl;
@@ -24,7 +25,7 @@ struct Node {
 
 int n;
 vector<Node> nodes;
-int max_color = 0;
+int max_color = 1;
 
 void init() {
     ifstream in("planting.in");
@@ -45,50 +46,58 @@ void init() {
         nodes[a].children.push_back(&nodes[b]);
         nodes[b].parent = &nodes[a];
     }
-
 }
 
-void color_child(Node* node) {
-    Node* paren = node->parent;
-    set<int>& n = paren->neighbors;
-
-    int color = 0;
-    while(n.find(color) != n.end()) {
-        color++;
-    }
-    if (color > max_color) {
-        max_color = color;
-    }
-
-    node->color = color;
-    n.insert(color);
-    node->neighbors.insert(color);
-    node->neighbors.insert(paren->color);
-
-    for (Node* c : node->children) {
-        color_child(c);
-    }
-}
-
-int main() { 
-    init(); 
+int main() {
+    init();
     // for (int i = 0; i < n; i++) {
     //     nodes[i].print();
     //     cout << endl;
     // }
 
-    nodes[0].color = 0;
-    nodes[0].neighbors.insert(0);
-    for (Node* c : nodes[0].children) {
-        color_child(c);
+    stack<Node *> visit;
+    nodes[0].color = 1;
+    nodes[0].neighbors.insert(1);
+    for (Node *c : nodes[0].children) {
+        visit.push(c);
     }
-    
+    while (!visit.empty()) {
+        Node *n = visit.top();
+        visit.pop();
+        Node *p = n->parent;
+        set<int> &s = p->neighbors;
+
+        int color = 1;
+        if (s.size() == max_color) {
+            color = max_color + 1;
+        } else {
+            while (s.find(color) != s.end()) {
+                color++;
+            }
+        }
+        if (color > max_color) {
+            max_color = color;
+        }
+
+        p->neighbors.insert(color);
+
+        if (n->children.size() > 0) {
+            n->color = color;
+            n->neighbors.insert(color);
+            n->neighbors.insert(p->color);
+
+            for (Node *c : n->children) {
+                visit.push(c);
+            }
+        }
+    }
+
     // for (int i = 0; i < n; i++) {
     //     nodes[i].print();
     //     cout << endl;
     // }
-    // cout << max_color + 1 << endl;
+    // cout << max_color << endl;
     ofstream out("planting.out");
-    out << max_color + 1 << endl;
-    return 0; 
+    out << max_color << endl;
+    return 0;
 }
