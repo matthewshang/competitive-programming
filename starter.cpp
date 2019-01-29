@@ -1,5 +1,7 @@
 #include "bits/stdc++.h"
 
+using namespace std;
+
 #define pb push_back
 #define fi first
 #define se second
@@ -8,8 +10,6 @@
 typedef pair<int, int> pii;
 typedef vector<int> vi;
 typedef long long ll;
-
-using namespace std;
 
 int main() {
     ifstream in("starter.in");
