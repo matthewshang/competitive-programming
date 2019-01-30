@@ -1,7 +1,8 @@
 | Contest  | Name        | Status          |
 | :------- | :---------- | :-------------- |
-| 2016 Dec | haybales    | solved 1/29/19  |
-|          | moocast     | solved 1/29/19  |
+| 2016 Dec | haybales    | solved 1/28/19  |
+|          | citystate   | solved 1/29/19  |
+|          | moocast     | solved 1/28/19  |
 | 2017 Dec | homework    | solved 1/08/19  |
 |          | measurement |                 |
 |          | shuffle     |                 |

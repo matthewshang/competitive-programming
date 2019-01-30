@@ -5,6 +5,7 @@ using namespace std;
 #define pb push_back
 #define fi first
 #define se second
+#define fora(i, a, n) for (int i = (a); i < (n); ++i)
 #define forn(i, n) for (int i = 0; i < (n); ++i)
 
 typedef pair<int, int> pii;
