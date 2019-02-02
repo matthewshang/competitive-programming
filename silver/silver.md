@@ -1,6 +1,7 @@
 | Contest  | Name        | Status          |
 | :------- | :---------- | :-------------- |
-| 2015 Dec | highcard    | solved 1/31/19  |
+| 2015 Dec | lightson    | solved 2/1/19   |
+|          | highcard    | solved 1/31/19  |
 |          | bcount      | solved 1/30/19  |
 | 2016 Dec | haybales    | solved 1/28/19  |
 |          | citystate   | solved 1/29/19  |

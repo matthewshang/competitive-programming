@@ -21,13 +21,11 @@ bool mark[MAXN][MAXN];
 map<pii, vector<pii>> switches;
 
 void flood(queue<pii>& q, int r, int c) {
-    if (r < 0 || r >= n || c < 0 || c >= n || mark[r][c]) {
+    if (r < 0 || r >= n || c < 0 || c >= n || mark[r][c] || !lit[r][c]) {
         return;
     }
     mark[r][c] = true;
-
-    if (!lit[r][c]) return;
-
+    
     if (!visit[r][c]) {
         q.emplace(r, c);
     }
@@ -37,25 +35,10 @@ void flood(queue<pii>& q, int r, int c) {
     }
 }
 
-int count(int r, int c) {
-    if (r < 0 || r >= n || c < 0 || c >= n || mark[r][c]) {
-        return 0;
-    }
-    mark[r][c] = true;
-
-    if (!lit[r][c]) return 0;
-
-    int sum = 1;
-    forn(i, 4) {
-        sum += count(r + DIR[i][0], c + DIR[i][1]);
-    }
-    return sum;
-}
-
 int main() {
     ifstream in("lightson.in");
     in >> n >> m;
-    forn(i, n) {
+    forn(i, m) {
         int x, y, a, b;  in >> x >> y >> a >> b;
         switches[make_pair(x - 1, y - 1)].emplace_back(a - 1, b - 1);
     }
@@ -74,7 +57,6 @@ int main() {
         rooms.pop();
         if (visit[r.fi][r.se]) continue;
 
-        visit[r.fi][r.se] = true;
         auto it = switches.find(r);
         if (it != switches.end()) {
             for (const auto& p : it->second) {
@@ -84,10 +66,17 @@ int main() {
 
         forn(i, n) forn(j, n) mark[i][j] = false;
         flood(rooms, 0, 0);
-    }
-    forn(i, n) forn(j, n) mark[i][j] = false;
-    cout << count(0, 0) << endl;
 
+        visit[r.fi][r.se] = true;
+    }
+
+    int count = 0;
+    forn(i, n) {
+        forn(j, n) {
+            if (lit[i][j]) count++;
+        }
+    }
     ofstream out("lightson.out");
+    out << count << endl;
     return 0;
 }
