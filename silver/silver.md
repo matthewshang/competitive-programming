@@ -9,6 +9,8 @@
 | 2017 Dec | homework    | solved 1/08/19  |
 |          | measurement |                 |
 |          | shuffle     |                 |
+| 2018 Jan | lifeguards  |                 |
+|          | rental      |                 |
 | 2018 Feb | reststops   | solved 1/26/19  |
 |          | snowboots   |                 |
 | 2018 Dec | convention  |                 |
