@@ -2,101 +2,109 @@
 
 using namespace std;
 
-#define MOD 1000000007
+#define fi first
+#define se second
+#define fora(i, a, n) for (int i = (a); i < (n); ++i)
+#define forn(i, n) for (int i = 0; i < (n); ++i)
 
-#define MAXN 5000
-int n, m, k;
-map<int, vector<int>> words;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef long long ll;
+
+namespace io {
+    template <typename T>
+    void pr(const vector<T>& v) {
+        forn (i, v.size()) cout << v[i] << " ";
+        cout << endl;
+    }
+
+    template <typename T>
+    void pr(T* arr, int n) {
+        forn (i, n) cout << arr[i] << " ";
+        cout << endl;
+    }
+}
+
+const ll MOD = 1000000007;
+const int MAXN = 5000;
+const int MAXK = 5000;
+int wordlens[MAXK + 1]; 
+vi classes[MAXN];
 int rhyme[26];
-map<int, int> c;
-int* s;
-int* len_count;
+
+ll dp[MAXK + 1];
+
+ll mod_exp(ll x, int n) {
+    if (n == 0) return 1;
+    int i = 1;
+    ll base = x;
+    while (i * 2 < n) {
+        i *= 2;
+        x = (x * x + MOD) % MOD;
+    }
+
+    while (i < n) {
+        x = (x * base + MOD) % MOD;
+        i++;
+    }
+    return x;
+}
 
 int main() {
+    int n, m, k;
     ifstream in("poetry.in");
     in >> n >> m >> k;
-    s = new int[k + 1];
-    len_count = new int[k + 1]; 
-    for (int i = 0; i <= k; i++) {
-        s[i] = 0;
-        len_count[i] = 0;
+    forn (i, n) wordlens[i] = 0;
+    forn (i, n) {
+        int s, c;  in >> s >> c;
+        wordlens[s]++;
+        classes[c - 1].push_back(s);
     }
-
-    for (int i = 0; i < n; i++) {
-        int syl, cla;
-        in >> syl >> cla;
-        auto it = words.find(cla);
-        if (it != words.end()) {
-            it->second.push_back(syl);
-        } else {
-            words.insert(make_pair(cla, vector<int>{syl}));
-        }
-        len_count[syl]++;
-    }
-
-    for (int i = 0; i < 26; i++) rhyme[i] = 0;
-    for (int i = 0; i < m; i++) {
-        char c;
-        in >> c;
+    forn (i, 26) rhyme[i] = 0;
+    forn (i, m) {
+        char c;  in >> c;
         rhyme[c - 'A']++;
     }
-    // for (int i = 0; i < 26; i++) cout << rhyme[i] << ", ";
-    // cout << endl;
 
-    // for (int i = 0; i <= k; i++) {
-    //     cout << len_count[i] << ", ";
-    // }
-    // cout << endl;
-
-    s[0] = 1;
-    s[1] = len_count[1];
-    for (int i = 2; i <= k; i++) {
-        for (int j = 1; j <= i; j++) {
-            s[i] += len_count[j] * s[i - j]; 
+    forn (i, k + 1) dp[i] = 0;
+    dp[0] = 1;
+    fora (i, 1, k + 1) {
+        forn (j, i) {
+            dp[i] = (dp[i] + ((ll)wordlens[i - j] * dp[j] + MOD) % MOD + MOD) % MOD;
         }
-    } 
-    s[0] = 0;
-
-    // cout << "s: ";
-    // for (int i = 0; i <= k; i++) {
-    //     cout << s[i] << ", ";
-    // }
-    // cout << endl;
-
-    for (const auto& it : words) {
-        int cla = it.first;
-        auto it2 = c.find(cla);
-        if (it2 == c.end()) {
-            c.insert(make_pair(cla, 0));
-        }
-        int total = 0;
-        for (int len : it.second) {
-            total += s[k - len]; 
-        }
-        c[cla] += total;
     }
+    // dp[0] = 0;
 
-    // for (auto& it : c) {
-    //     cout << it.first << ", " << it.second << endl;
-    // }
-
-    int result = 1;
-    for (int i = 0; i < 26; i++) {
-        int mul = 0;
-        int p = rhyme[i];
-        if (p == 0) continue;
-        for (auto& it : c) {
-            int q = 1;
-            for (int j = 0; j < p; j++) {
-                q = (q * it.second) % MOD;
+    vector<ll> r;
+    forn (i, MAXN) {
+        if (!classes[i].empty()) {
+            r.push_back(0);
+            for (auto x : classes[i]) {
+                r.back() = (r.back() + dp[k - x] + MOD) % MOD;
             }
-            mul = (mul + q) % MOD;
         }
-        result = (result * mul) % MOD;
     }
-    // cout << result << endl;
-    ofstream out("poetry.out");
-    out << result << endl;
 
+    ll prod = 1;
+    vector<ll> rexp = r;
+    sort(rhyme, rhyme + 26);
+    // io::pr(rhyme, 26);
+    forn (i, 26) {
+        if (rhyme[i] == 0) continue;
+        // io::pr(rexp);
+        ll sum = 0;
+        int last_exp = i == 0 ? 1 : max(1, rhyme[i - 1]);
+        // cout << last_exp << ", " << rhyme[i] << endl;
+        forn (j, r.size()) {
+            rexp[j] = (rexp[j] * mod_exp(r[j], rhyme[i] - last_exp) + MOD) % MOD;
+            sum = (sum + rexp[j] + MOD) % MOD;
+        }
+        prod = (prod * sum + MOD) % MOD;
+    }
+    // io::pr(r);
+    // cout << prod << endl;
+
+    ofstream out("poetry.out");
+    out << prod << endl;
     return 0;
 }

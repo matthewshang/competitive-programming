@@ -29,11 +29,14 @@ def compare(file1, file2):
     return True
 
 
+def is_downloaded(problem):
+    return problem in [d for d in os.listdir('build') if os.path.isdir(join('build', d))]
+
+
 def download_tests(problem, diff, date):
     url = 'http://www.usaco.org/current/data/{}_{}_{}.zip'.format(
         problem, diff, date)
-    dirs = [d for d in os.listdir('build') if os.path.isdir(join('build', d))]
-    if problem in dirs:
+    if is_downloaded(problem):
         print(problem + ' is already downloaded')
         return
 
@@ -69,10 +72,14 @@ if __name__ == '__main__':
     elif op == 'cl':
         shutil.rmtree('build')
         os.makedirs('build')
-    elif op == 'mk':
+    elif op == 'set':
         path = join('build', sys.argv[2] + '.in')
-        if not os.path.exists(path):
-            with open(path, 'w'):
-                pass
+        if os.path.exists(path):
+            os.remove(path)
+        name = '1.in' if len(sys.argv) < 4 else sys.argv[3] + '.in'
+        if not is_downloaded(sys.argv[2]):
+            print(sys.argv[2] + ' is not downloaded')
+        else:
+            shutil.copyfile(join('build', sys.argv[2], name), path)
     else:
         do_tests(sys.argv[1])
