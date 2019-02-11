@@ -9,125 +9,112 @@ using namespace std;
 
 typedef pair<int, int> pii;
 typedef vector<int> vi;
-typedef long long ll;
+typedef long long LL;
 
 namespace io {
-void pr(const vi &v) {
-    forn(i, v.size()) cout << v[i] << " ";
-    cout << endl;
-}
+    void setIO(string s) {
+        freopen((s + ".in").c_str(), "r", stdin);
+        #ifndef TESTING 
+        freopen((s + ".out").c_str(), "w", stdout);
+        #endif
+    }
 
-template <typename T> void pr(T *arr, int n) {
-    forn(i, n) cout << arr[i] << " ";
-    cout << endl;
-}
+    void pr(const vi &v) {
+        forn(i, v.size()) cout << v[i] << " ";
+        cout << endl;
+    }
+
+    template <typename T> void pr(T *arr, int n) {
+        forn(i, n) cout << arr[i] << " ";
+        cout << endl;
+    }
 } // namespace io
 
-const int MAXN = 10000;
-const ll MOD = 1000000007;
+const int MAXN = 100000;
+const LL MOD = 1000000007;
+
+int n, k;
+set<int> tree[MAXN];
+int parent[MAXN];
+LL dp[MAXN][3];
+bool cfixed[MAXN];
+int root = -1;
+LL answer = 1;
+
+void insert_edge(int x, int y) {
+    if (parent[x] == -1) {
+        parent[x] = y;
+        tree[y].insert(x);
+    } else if (parent[y] == -1) {
+        parent[y] = x;
+        tree[x].insert(y);
+    } else {
+        int u = parent[x], v = x;
+        while (u != -1) {
+            int p = parent[u];
+            tree[u].erase(v);
+            tree[v].insert(u);
+            parent[u] = v;
+            v = u;
+            u = p;
+        } 
+        parent[x] = y;
+        tree[y].insert(x);
+    }
+}
+
+void color(int u) {
+    // cout << "node " << u << ": "; for (int x : tree[u]) cout << x << " ";
+    // cout << endl;
+    for (int x : tree[u]) {
+        color(x);
+    }
+
+    LL a = dp[u][0], b = dp[u][1], c = dp[u][2];
+    if (!cfixed[u]) {
+        a = b = c = 1;
+    }
+    for (int x : tree[u]) {
+        a = (a * ((dp[x][1] + dp[x][2]) % MOD)) % MOD;
+        b = (b * ((dp[x][2] + dp[x][0]) % MOD)) % MOD;
+        c = (c * ((dp[x][0] + dp[x][1]) % MOD)) % MOD;
+    }
+
+    // cout << u << ": "; io::pr(dp[u], 3);
+    if (cfixed[u] || u == root) {
+        answer = (answer * ((a + b + c) % MOD)) % MOD;
+    } else {
+        dp[u][0] = a, dp[u][1] = b, dp[u][2] = c;
+    }
+}
 
 int main() {
-    set<int> graph[MAXN];
-    int parent[MAXN];
-    ll dp[MAXN][3];
-    int mark[MAXN];
-    bool fixed[MAXN];
-    int n, k;
-
-    ifstream in("barnpainting.in");
-    in >> n >> k;
+    io::setIO("barnpainting");
+    cin >> n >> k;
     forn (i, n) parent[i] = -1;
     forn (i, n - 1) {
-        int x, y;
-        in >> x >> y;
-        x--;
-        y--;
-        if (parent[x] == -1) {
-            graph[y].insert(x);
-            parent[x] = y;
-        } else if (parent[y] == -1) {
-            graph[x].insert(y);
-            parent[y] = x;
-        } else {
-            parent[parent[x]] = x;
-            graph[parent[x]].erase(x);
-            parent[x] = y;
-            graph[y].insert(x);
-        }
+        int x, y;  cin >> x >> y;
+        insert_edge(x - 1, y - 1);
     }
 
-    forn (i, n) {
-        forn (j, 3) dp[i][j] = 0;
-        fixed[i] = false;
-    }
+    forn (i, n) cfixed[i] = false;
+    forn (i, n) forn (j, 3) dp[i][j] = 0;
     forn (i, k) {
-        int b, c;  in >> b >> c;
+        int b, c;  cin >> b >> c;
         dp[b - 1][c - 1] = 1;
-        fixed[b - 1] = true;
+        cfixed[b - 1] = true;
     }
+
     forn (i, n) {
-        cout << "node " << i << ": parent: " << parent[i] << endl;
-        for (int x : graph[i]) {
-            cout << x << " ";
-        }
-        cout << endl;
-        cout << "dp: " << dp[i][0] << ", " << dp[i][1] << ", " << dp[i][2] << endl;
-    }
-
-    queue<int> q;
-    ll answer = 1;
-    int root = -1;
-    forn (i, n) {
-        mark[i] = graph[i].size();
-        if (mark[i] == 0) {
-            q.push(i);
-            cout << "leaf: " << i << endl;
-        }
-        if (parent[i] == -1) root = i;
-    }
-    cout << "root: " << root << endl;
-
-    while (!q.empty()) {
-        int u = q.front();
-        q.pop();
-
-        if (mark[u] == -1) {
-            continue;
-        } else if (mark[u] != 0) {
-            q.push(u);
-            continue;
-        }
-
-        for (int x : graph[u]) {
-            dp[u][0] = dp[u][0] * (dp[x][1] + dp[x][2]);
-            dp[u][1] = dp[u][1] * (dp[x][0] + dp[x][2]);
-            dp[u][2] = dp[u][2] * (dp[x][0] + dp[x][1]);
-        }
-        if (fixed[u]) {
-            answer *= dp[u][0] + dp[u][1] + dp[u][2];
-        }
-        if (graph[u].size() == 0) {
-            forn (i, 3) dp[u][i] = 1;
-        }
-        
-        if (parent[u] != -1) {
-            mark[parent[u]]--;
-            q.push(parent[u]);
+        if (parent[i] == -1) {
+            root = i;
+            break;
         }
     }
 
-    if (!fixed[root]) {
-        for (int x : graph[root]) {
-            dp[root][0] = dp[root][0] * (dp[x][1] + dp[x][2]);
-            dp[root][1] = dp[root][1] * (dp[x][0] + dp[x][2]);
-            dp[root][2] = dp[root][2] * (dp[x][0] + dp[x][1]);
-        }
-        answer *= dp[root][0] + dp[root][1] + dp[root][2];
-    }
-
-
-        
+    // cout << root << endl;
+    color(root);
     cout << answer << endl;
-    ofstream out("barnpainting.out");
+
     return 0;
 }

@@ -56,7 +56,9 @@ def do_tests(problem):
 
         for i in range(1, int(len(files) / 2) + 1):
             shutil.copyfile(join(problem, '{}.in'.format(i)), name)
-            subprocess.call(problem + '.exe')
+            if subprocess.call(problem + '.exe') != 0:
+                print('Non-zero status code')
+                break
 
             same = compare(join(problem, '{}.out'.format(i)), problem + '.out')
             print('test {}: {}'.format(i, 'ok' if same else 'fail'))
