@@ -1,12 +1,13 @@
-| Contest  | Name        | Status          |
-| :------- | :---------- | :-------------- |
+| Contest  | Name        | Status          | Topic        |
+| :------- | :---------- | :-------------- | :----------- |
 | 2015 Dec | lightson    | solved 2/1/19   |
 |          | highcard    | solved 1/31/19  |
 |          | bcount      | solved 1/30/19  |
 | 2016 Dec | haybales    | solved 1/28/19  |
 |          | citystate   | solved 1/29/19  |
 |          | moocast     | solved 1/28/19  |
-| 2017 Feb | maxcross    | solved 2/15/19  |
+| 2017 Feb | helpcross   | solved 2/15/19  | sorting, set |
+|          | maxcross    | solved 2/15/19  | sum          |
 | 2017 Dec | homework    | solved 1/08/19  |
 |          | measurement |                 |
 |          | shuffle     |                 |
