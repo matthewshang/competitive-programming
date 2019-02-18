@@ -67,21 +67,26 @@ def do_tests(problem):
         os.remove(copy_name)
 
 
+def set_in(problem, index):
+    path = join('build', problem + '.in')
+    if os.path.exists(path):
+        os.remove(path)
+    name = str(index) + '.in'
+    if not is_downloaded(problem):
+        print(problem + ' is not downloaded')
+    else:
+        shutil.copyfile(join('build', problem, name), path)
+
+
 if __name__ == '__main__':
     op = sys.argv[1]
     if op == 'dl':
         download_tests(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else '')
+        set_in(sys.argv[2], 1)
     elif op == 'cl':
         shutil.rmtree('build')
         os.makedirs('build')
     elif op == 'set':
-        path = join('build', sys.argv[2] + '.in')
-        if os.path.exists(path):
-            os.remove(path)
-        name = '1.in' if len(sys.argv) < 4 else sys.argv[3] + '.in'
-        if not is_downloaded(sys.argv[2]):
-            print(sys.argv[2] + ' is not downloaded')
-        else:
-            shutil.copyfile(join('build', sys.argv[2], name), path)
+        set_in(sys.argv[2], 1 if len(sys.argv) < 4 else sys.argv[3])
     else:
         do_tests(sys.argv[1])
