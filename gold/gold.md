@@ -5,6 +5,7 @@
 |          | checklist    | solved 2/17/19 | dp - watch out for LL |
 |          | lasers       | 5/10           |                       |
 | 2017 Jan | bphoto       | solved 2/17/19 | Fenwick tree          |
+|          | hps          | solved 2/17/19 | dp                    |
 | 2017 Dec | barnpainting | solved 2/10/19 | tree, dp              |
 |          | hayfeast     | solved 2/11/19 | min deque             |
 | 2019 Jan | poetry       | solved 2/5/19  | dp, math              |
