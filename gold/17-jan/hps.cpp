@@ -30,7 +30,9 @@ namespace io {
     }
 }
 
-void print_state(int dp[11][3][3], int n, int m) {
+const int MAXN = 100010, MAXM = 22;
+
+void print_state(int dp[MAXN][MAXM][3], int n, int m) {
     forn (k, 3) {
         cout << "k = " << k << endl;
         forn (j, m) {
@@ -41,12 +43,10 @@ void print_state(int dp[11][3][3], int n, int m) {
     }
 }
 
-const int MAXN = 100000, MAXM = 20;
-
 int main() {
     io::setIO("hps");
     int n, m;
-    int dp[MAXN + 1][MAXM + 1][3];
+    int dp[MAXN][MAXM][3];
     // int dp[10 + 1][2 + 1][3];
     int g[100000];
     cin >> n >> m;
@@ -58,14 +58,14 @@ int main() {
     }
     // io::pr(g, n);
 
-    forn (i, n) forn (j, m) forn (k, 3) dp[i][j][k] = 0;
+    forn (i, n) forn (j, m + 1) forn (k, 3) dp[i][j][k] = 0;
 
     dp[0][0][0] = g[0] == 0;
     dp[0][0][1] = g[0] == 1;
     dp[0][0][2] = g[0] == 2;
 
     forn (i, n) {
-        forn (j, m) {
+        forn (j, m + 1) {
             forn (k, 3) {
                 int k1 = (k + 1) % 3;
                 int k2 = (k + 2) % 3;
@@ -82,6 +82,12 @@ int main() {
         }
     }
     // print_state(dp, n, m + 1);
-    cout << max(dp[n - 1][m][0], max(dp[n - 1][m][1], dp[n - 1][m][2])) << endl;;
+    int answer = 0;
+    forn (j, m + 1) {
+        answer = max(answer, dp[n - 1][j][0]);
+        answer = max(answer, dp[n - 1][j][1]);
+        answer = max(answer, dp[n - 1][j][2]);
+    }
+    cout << answer << endl;
     return 0;
 }
