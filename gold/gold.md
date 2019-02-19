@@ -8,6 +8,7 @@
 |          | hps          | solved 2/17/19 | dp                    |
 | 2017 Dec | barnpainting | solved 2/10/19 | tree, dp              |
 |          | hayfeast     | solved 2/11/19 | min deque             |
+| 2018 Jan | atlarge      | solved 2/18/19 | tree, dfs             |
 | 2019 Jan | poetry       | solved 2/5/19  | dp, math              |
 |          | sleepy       | solved 2/5/19  | Fenwick tree          |
 |          | shortcut     | solved 2/5/19  | shortest path, dfs    |
