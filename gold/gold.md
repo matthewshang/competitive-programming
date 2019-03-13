@@ -13,3 +13,6 @@
 | 2019 Jan | poetry       | solved 2/5/19  | dp, math                                                                  |
 |          | sleepy       | solved 2/5/19  | Fenwick tree                                                              |
 |          | shortcut     | solved 2/5/19  | shortest path, dfs                                                        |
+| 2019 Feb | cowland      |                |                                                                           |
+|          | dishwashing  |                |                                                                           |
+|          | paintbarn    | 12/14          |                                                                           |
