@@ -21,3 +21,4 @@
 | 2019 Jan | planting    | solved 1/21/19  |
 |          | perimeter   | solved 1/21/19  |
 |          | mountains   | solved 1/21/19  |
+| 2019 Feb | paintbarn   | solved 3/27/19  | 2D prefix sums |

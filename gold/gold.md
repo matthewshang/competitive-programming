@@ -15,4 +15,4 @@
 |          | shortcut     | solved 2/5/19  | shortest path, dfs                                                        |
 | 2019 Feb | cowland      |                |                                                                           |
 |          | dishwashing  |                |                                                                           |
-|          | paintbarn    | 12/14          |                                                                           |
+|          | paintbarn    | solved 3/27/19 | sweep line                                                                |

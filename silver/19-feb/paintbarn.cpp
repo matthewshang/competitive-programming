@@ -32,5 +32,33 @@ namespace io {
 }
 
 int main() {
+    io::setIO("paintbarn");
+    int n, k; cin >> n >> k;
+    int g[1010][1010];
+    int pre[1010][1010];
+    F0R (i, 1010) F0R (j, 1010) g[i][j] = pre[i][j] = 0;
+
+    int N = 0;
+    F0R (i, n) {
+        int x1, y1, x2, y2; cin >> x1 >> y1 >> x2 >> y2;
+        g[x1][y1]++; g[x2][y2]++;
+        g[x1][y2]--; g[x2][y1]--;
+        N = max(N, max(x2, y2));
+    }
+
+    pre[0][0] = g[0][0];
+    FOR (i, 1, N + 1) {
+        pre[0][i] = pre[0][i - 1] + g[0][i];
+        pre[i][0] = pre[i - 1][0] + g[i][0];
+    }
+
+    int answer = 0;
+    F0R (i, N + 1) {
+        F0R (j, N + 1) {
+            if (i && j) pre[i][j] = pre[i - 1][j] + pre[i][j - 1] - pre[i - 1][j - 1] + g[i][j];
+            if (pre[i][j] == k) answer++;
+        }
+    }
+    cout << answer << endl;
     return 0;
 }
