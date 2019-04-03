@@ -1,5 +1,5 @@
 | Contest   | Name         | Status         | Notes                                                                     |
-| :-------  | :----------- | :------------- | :------------------------------------------------------------------------ |
+| :-------- | :----------- | :------------- | :------------------------------------------------------------------------ |
 | 2016 Feb  | fencedin     | solved 2/14/19 | MST                                                                       |
 | 2016 Dec  | moocast      | solved 1/29/19 | binary search, graph                                                      |
 |           | checklist    | solved 2/17/19 | dp - watch out for LL                                                     |
@@ -17,3 +17,6 @@
 | 2019 Feb  | cowland      |                |                                                                           |
 |           | dishwashing  |                |                                                                           |
 |           | paintbarn    | solved 3/27/19 | sweep line                                                                |
+| 2019 Open | snakes       | 10/12          | dp                                                                        |
+|           | walk         | solved 3/31/19 | graphs, MST, one line!                                                    |
+|           | balance      | 2/14           | inversions                                                                |
