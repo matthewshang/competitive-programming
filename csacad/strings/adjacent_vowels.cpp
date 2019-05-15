@@ -13,13 +13,6 @@ typedef vector<int> vi;
 typedef long long LL;
 
 namespace io {
-    void setIO(string s) {
-        freopen((s + ".in").c_str(), "r", stdin);
-        #ifndef TESTING
-        freopen((s + ".out").c_str(), "w", stdout);
-        #endif
-    }
-
     template <typename T> void pr(const vector<T> &v) {
         F0R (i, v.size()) cout << v[i] << " ";
         cout << endl;
@@ -31,6 +24,18 @@ namespace io {
     }
 }
 
+bool is_vowel(char c) {
+    return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+}
+
 int main() {
+    int N; cin >> N;
+    string s; cin >> s;
+
+    int answer = 0;
+    F0R (i, N - 1) {
+        if (is_vowel(s[i]) && is_vowel(s[i + 1])) ++answer;
+    }
+    cout << answer << endl;
     return 0;
 }

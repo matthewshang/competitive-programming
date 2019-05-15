@@ -13,14 +13,7 @@ typedef vector<int> vi;
 typedef long long LL;
 
 namespace io {
-    void setIO(string s) {
-        freopen((s + ".in").c_str(), "r", stdin);
-        #ifndef TESTING
-        freopen((s + ".out").c_str(), "w", stdout);
-        #endif
-    }
-
-    template <typename T> void pr(const vector<T> &v) {
+    void pr(const vi &v) {
         F0R (i, v.size()) cout << v[i] << " ";
         cout << endl;
     }
@@ -32,5 +25,8 @@ namespace io {
 }
 
 int main() {
+    int N; cin >> N;
+    vi a(N); F0R (i, N) cin >> a[i];
+
     return 0;
 }

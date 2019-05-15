@@ -13,13 +13,6 @@ typedef vector<int> vi;
 typedef long long LL;
 
 namespace io {
-    void setIO(string s) {
-        freopen((s + ".in").c_str(), "r", stdin);
-        #ifndef TESTING
-        freopen((s + ".out").c_str(), "w", stdout);
-        #endif
-    }
-
     template <typename T> void pr(const vector<T> &v) {
         F0R (i, v.size()) cout << v[i] << " ";
         cout << endl;
@@ -31,6 +24,27 @@ namespace io {
     }
 }
 
+bool ok(string& str, int letters[26]) {
+    int cpy[26]; F0R (i, 26) cpy[i] = letters[i];
+    cpy[str[0] - 'a']--;
+    F0R (i, str.size()) {
+        int j = str[i] - 'a';
+        if (--cpy[j] < 0) return false;
+    }
+    return true;
+}
+
 int main() {
+    int N; cin >> N;
+    vector<string> s(N); F0R (i, N) cin >> s[i];
+    
+    int letters[26]; F0R (i, 26) letters[i] = 0;
+    F0R (i, N) letters[s[i][0] - 'a']++;
+
+    int answer = 0;
+    for (auto& str : s) {
+        if (ok(str, letters)) ++answer;
+    }
+    cout << answer << endl;
     return 0;
 }

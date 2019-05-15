@@ -13,13 +13,6 @@ typedef vector<int> vi;
 typedef long long LL;
 
 namespace io {
-    void setIO(string s) {
-        freopen((s + ".in").c_str(), "r", stdin);
-        #ifndef TESTING
-        freopen((s + ".out").c_str(), "w", stdout);
-        #endif
-    }
-
     template <typename T> void pr(const vector<T> &v) {
         F0R (i, v.size()) cout << v[i] << " ";
         cout << endl;
@@ -31,6 +24,28 @@ namespace io {
     }
 }
 
+string rot(string& s, int offset) {
+    string cpy = s;
+    F0R (i, s.size()) cpy[i] = 'a' + (s[i] - 'a' + offset) % 26;
+    return cpy;
+}
+
 int main() {
+    int N; cin >> N;
+    vector<string> strings(N); F0R (i, N) cin >> strings[i];
+
+    unordered_map<string, int> mp;
+    for (string& s : strings) {
+        int off = 26 - s[0] - 'a';
+        s = rot(s, off);
+        mp[s] += 1;
+    }
+
+    for (string& s : strings) {
+        int off = 26 - s[0] - 'a';
+        bool res = mp[rot(s, off)] > 1;
+        cout << res << endl;
+    }
+    
     return 0;
 }
