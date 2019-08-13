@@ -6,3 +6,4 @@ build/
 *.out
 *.txt
 .DS_Store
+cf/workspace
