@@ -7,3 +7,4 @@ build/
 *.txt
 .DS_Store
 cf/workspace
+*.log
