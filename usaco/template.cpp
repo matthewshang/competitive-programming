@@ -1,36 +1,40 @@
 #include "bits/stdc++.h"
 
 using namespace std;
+using ll = long long;
 
-#define fi first
-#define se second
-#define F0R(i, n) for (int i = 0; i < (n); ++i)
-#define FOR(i, a, n) for (int i = (a); i < (n); ++i)
-#define F0Rd(i, a) for (int i = (a); i >= 0; --i)
-
-typedef pair<int, int> pii;
-typedef vector<int> vi;
-typedef long long LL;
-
-namespace io {
-    void setIO(string s) {
-        freopen((s + ".in").c_str(), "r", stdin);
-        #ifndef TESTING
-        freopen((s + ".out").c_str(), "w", stdout);
-        #endif
-    }
-
-    template <typename T> void pr(const vector<T> &v) {
-        F0R (i, v.size()) cout << v[i] << " ";
-        cout << endl;
-    }
-
-    template <typename T> void pr(T *arr, int n) {
-        F0R (i, n) cout << arr[i] << " ";
-        cout << endl;
-    }
+void setIO(string s) {
+    freopen((s + ".in").c_str(), "r", stdin);
+    #ifndef TESTING
+    freopen((s + ".out").c_str(), "w", stdout);
+    #endif
 }
 
+void pr(int x) { cout << x; }
+
+template <typename T> 
+void pr(T& v) {
+    cout << "{";
+    bool f = true; for (auto& x : v) cout << (!f ? ", " : ""), f = false, pr(x);
+    cout << "}";
+}
+
+void pd() { cout << "]" << endl; }
+
+template <typename T, typename... U>
+void pd(T first, U... rest) {
+    pr(first); if (sizeof...(rest)) cout << ", "; pd(rest...);
+}
+
+#ifdef TESTING
+#define dbg(x...) cout << "[" << #x << "] = [", pd(x)
+#else
+#define dbg(...)
+#endif
+
 int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    setIO("");
+
     return 0;
 }
