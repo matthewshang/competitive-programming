@@ -12,6 +12,7 @@
 |           | hayfeast     | solved 2/11/19  | min deque                                                                 |
 | 2018 Jan  | atlarge      | solved 2/18/19  | tree, dfs                                                                 |
 | 2018 Feb  | dirtraverse  | solved 2/19/19  | tree, dfs - prefer better complexity to doing multiple things in one loop |
+| 2018 Dec  | teamwork     | solved 11/25/19 | dp                                                                        |
 | 2019 Jan  | poetry       | solved 2/5/19   | dp, math                                                                  |
 |           | sleepy       | solved 2/5/19   | Fenwick                                                                   |
 |           | shortcut     | solved 2/5/19   | shortest path, dfs                                                        |
