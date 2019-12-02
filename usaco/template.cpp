@@ -11,6 +11,15 @@ void setIO(string s) {
 }
 
 void pr(int x) { cout << x; }
+void pr(ll x) { cout << x; }
+void pr(size_t x) { cout << x; }
+void pr(const char* s) { cout << s; }
+void pr(string& s) { cout << s; }
+
+template <typename T1, typename T2>
+void pr(pair<T1, T2>& p) {
+    pr("{ "); pr(p.first); pr(", "); pr(p.second); pr(" }");
+}
 
 template <typename T> 
 void pr(T& v) {
