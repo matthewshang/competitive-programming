@@ -15,6 +15,7 @@ void pr(ll x) { cout << x; }
 void pr(size_t x) { cout << x; }
 void pr(const char* s) { cout << s; }
 void pr(string& s) { cout << s; }
+void pr(bool x) { cout << (x ? "true" : "false"); }
 
 template <typename T1, typename T2>
 void pr(const pair<T1, T2>& p) {
