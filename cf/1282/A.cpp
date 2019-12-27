@@ -3,13 +3,6 @@
 using namespace std;
 using ll = long long;
 
-void setIO(string s) {
-    freopen((s + ".in").c_str(), "r", stdin);
-    #ifndef TESTING
-    freopen((s + ".out").c_str(), "w", stdout);
-    #endif
-}
-
 void pr(int x) { cout << x; }
 void pr(ll x) { cout << x; }
 void pr(size_t x) { cout << x; }
@@ -43,7 +36,16 @@ void pd(T first, U... rest) {
 
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
-    setIO("");
+
+    int t; cin >> t;
+    while (t--) {
+        int a, b, c, r; cin >> a >> b >> c >> r;
+        if (a > b) swap(a, b);
+        int lo = min(max(a, c - r), b);
+        int hi = max(min(b, c + r), a);
+        int ans = b - a - (hi - lo);
+        cout << ans << endl;
+    }
 
     return 0;
 }

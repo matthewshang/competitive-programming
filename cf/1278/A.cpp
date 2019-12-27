@@ -41,9 +41,39 @@ void pd(T first, U... rest) {
 #define dbg(...)
 #endif
 
+void solve() {
+    string p, h; cin >> p >> h;
+    if (h.size() < p.size()) {
+        cout << "NO" << endl;
+        return;
+    }
+    for (int i = 0; i < h.size() - p.size() + 1; i++) {
+        int count[26];
+        for (int j = 0; j < 26; j++)
+            count[j] = 0;
+        for (int j = 0; j < p.size(); j++) {
+            count[p[j] - 'a']++;
+            count[h[i + j] - 'a']--;
+        }
+        bool good = true;
+        for (int j = 0; j < 26; j++)
+            if (count[j] != 0)
+                good = false;
+        if (good) {
+            cout << "YES" << endl;
+            return;
+        }
+    }
+    cout << "NO" << endl;
+}
+
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
-    setIO("");
+
+    int t; cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }

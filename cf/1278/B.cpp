@@ -41,9 +41,26 @@ void pd(T first, U... rest) {
 #define dbg(...)
 #endif
 
+void solve() {
+    ll a, b; cin >> a >> b;
+    if (a == b) {
+        cout << 0 << endl;
+        return;
+    }
+    if (a > b) swap(a, b);
+    ll n = (ll)ceil((sqrt(8.0 * (b - a)) - 1) / 2);
+    while ((a + b + n * (n + 1) / 2) % 2 == 1)
+        n++;
+    cout << n << endl;
+}
+
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
-    setIO("");
+
+    int t; cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }
