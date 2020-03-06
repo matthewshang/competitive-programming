@@ -15,6 +15,7 @@ struct BIT {
         return ans;
     }
     
+    // inclusive [l, r]
     int query(int l, int r) {
         return query(r) - query(l - 1);
     }
