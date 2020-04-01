@@ -1,15 +1,16 @@
+// Source: KACTL
 struct BIT { // Operation must be reversible
-    vector<int> bit; int n;
-    BIT(int n) { this->n = n + 1; bit.assign(n + 1, 0); } 
-    int query(int i) { // [0, n)
-        int ans = 0;
-        for (++i; i > 0; i -= i & -i) ans += bit[i];
+    vector<ll> bit;
+    BIT(int n) : bit(n) {}
+    ll query(int pos) { // pos in [0, n)
+        ll ans = 0;
+        for (; pos > 0; pos &= pos - 1) ans += bit[pos - 1];
         return ans;
     }
-    int query(int l, int r) { // [l, r]
-        return query(r) - query(l - 1);
+    ll query(int l, int r) { // [l, r]
+        return query(r + 1) - query(l);
     }
-    void update(int i, int val) { // [0, n)
-        for (++i; i < n; i += i & -i) bit[i] += val;
+    void update(int pos, int delta) { // pos in [0, n); 
+        for (; pos < sz(bit); pos |= pos + 1) bit[pos] += delta;
     }
 };
