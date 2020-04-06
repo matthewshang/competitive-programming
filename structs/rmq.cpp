@@ -1,17 +1,19 @@
 template <typename T>
 struct RMQ {
     vector<vector<T>> st;
-    RMQ(vector<T>& v) {
-        int k = 32 - __builtin_clz(sz(v) - 1);
-        st.resize(sz(v), vector<T>(k));
-        F0R (i, sz(v)) st[i][0] = v[i];
-        FOR (j, 1, k + 1) 
-            F0R (i, sz(v) - (1 << j) + 1)
-                st[i][j] = min(st[i][j - 1], st[i + (1 << (j - 1))][j - 1]);
+    void build(vector<T>& v) {
+        int t = __lg(sz(v));
+        st.resize(t + 1);
+        st[0].resize(sz(v));
+        F0R (i, sz(v)) st[0][i] = v[i];
+        F0R (l, t) {
+            int m = sz(v) - (1 << (l + 1)) + 1;
+            st[l + 1].resize(m);
+            F0R (i, m) st[l + 1][i] = min(st[l][i], st[l][i + (1 << l)]);
+        }
     }
-
-    T query(int l, int r) {
-        int j = 31 - __builtin_clz(r - l); // equivalent to floor(log2(r-l+1))
-        return min(st[l][j], st[r - (1 << j) + 1][j]);
+    T query(int l, int r) { // [l, r]
+        int t = __lg(r - l + 1);
+        return min(st[t][l], st[t][r - (1 << t) + 1]);
     }
 };

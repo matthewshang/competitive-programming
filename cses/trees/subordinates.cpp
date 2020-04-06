@@ -18,5 +18,20 @@ using vpi = vector<pair<int, int>>;
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
 
+    int n; cin >> n;
+    vector<int> par(n + 1);
+    vector<int> size(n + 1, 0);
+    vector<vector<int>> adj(n + 1);
+    FOR (i, 2, n) cin >> par[i];
+    FOR (i, 1, n) adj[par[i]].push_back(i);
+
+    function<int(int)> dfs = [&](int u) -> int {
+        for (int x : adj[u]) size[u] += dfs(x);
+        return 1 + size[u];
+    };
+    dfs(1);
+    FOR (i, 1, n) cout << size[i] << " ";
+    cout << endl;
+
     return 0;
 }
