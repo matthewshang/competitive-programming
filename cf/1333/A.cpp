@@ -3,7 +3,6 @@ using namespace std;
 using ll = long long;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
-using vl = vector<long long>;
 using pii = pair<int, int>;
 using vpi = vector<pair<int, int>>;
 
@@ -19,6 +18,18 @@ using vpi = vector<pair<int, int>>;
 
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
+
+    int t; cin >> t;
+    while (t--) {
+        int n, m; cin >> n >> m;
+        cout << 'W';
+        F0R (i, m - 1) cout << 'B';
+        cout << endl;
+        F0R (i, n - 1) {
+            F0R (i, m) cout << 'B';
+            cout << endl;
+        }
+    }
 
     return 0;
 }

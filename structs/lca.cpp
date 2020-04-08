@@ -1,7 +1,7 @@
 struct LCA {
-    vector<int> first; RMQ<pii> Q;
-    LCA(int n, vector<vector<int>>& adj) { build(n, adj); }
-    void build(int n, vector<vector<int>>& adj) {
+    vi first; RMQ<pii> Q;
+    LCA(int n, vvi& adj) { build(n, adj); }
+    void build(int n, vvi& adj) {
         int N = 2 * n - 1, idx = 0; vpi v(N);
         function<void(int, int, int)> dfs = [&](int u, int h, int p) {
             int i = idx++;

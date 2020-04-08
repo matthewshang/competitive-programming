@@ -2,8 +2,6 @@
 using namespace std;
 using ll = long long;
 using vi = vector<int>;
-using vvi = vector<vector<int>>;
-using vl = vector<long long>;
 using pii = pair<int, int>;
 using vpi = vector<pair<int, int>>;
 
@@ -19,6 +17,28 @@ using vpi = vector<pair<int, int>>;
 
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
+
+    int n; cin >> n;
+    vi a(n);
+    F0R (i, n) cin >> a[i];
+
+    vector<ll> pre(n + 1);
+    pre[0] = 0;
+    F0R (i, n) pre[i + 1] = pre[i] + a[i];
+    ll ans = 0;
+    int st = 0;
+    map<ll, int> idx;
+    idx[0] = 1;
+    FOR (i, 1, n) {
+        auto it = idx.find(pre[i]);
+        if (it != idx.end()) {
+            int j = it->second;
+            st = max(st, j);
+        }
+        ans += (ll)(i - st);
+        idx[pre[i]] = i + 1;
+    }
+    cout << ans << endl;
 
     return 0;
 }
