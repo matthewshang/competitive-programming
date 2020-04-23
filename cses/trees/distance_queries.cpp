@@ -68,14 +68,24 @@ int main() {
 
     int n, q; cin >> n >> q;
     vvi adj(n);
-    FOR (i, 1, n - 1) {
-        int e; cin >> e;
-        adj[e - 1].push_back(i);
+    F0R (i, n - 1) {
+        int a, b; cin >> a >> b;
+        adj[a-1].pb(b-1); adj[b-1].pb(a-1);
     }
     LCA L(n, adj);
+    vi h(n);
+    h[0] = 0;
+    function<void(int, int)> dfs = [&](int u, int p) {
+        for (int x : adj[u]) if (x != p) {
+            h[x] = h[u] + 1;
+            dfs(x, u);
+        }
+    };
+    dfs(0, -1);
     while (q--) {
         int a, b; cin >> a >> b;
-        cout << (L.query(a - 1, b - 1) + 1) << endl;
+        int d = h[a-1] + h[b-1] - 2 * h[L.query(a-1, b-1)];
+        cout << d << endl;
     }
 
     return 0;
