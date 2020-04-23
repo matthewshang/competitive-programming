@@ -5,7 +5,6 @@ using vi = vector<int>;
 using vvi = vector<vector<int>>;
 using vll = vector<long long>;
 using pii = pair<int, int>;
-using pll = pair<long long, long long>;
 using vpi = vector<pair<int, int>>;
 
 #define F first
@@ -24,6 +23,20 @@ const ll INF = 1e18;
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
+
+    int t; cin >> t;
+    while (t--) {
+        int n; cin >> n;
+        map<int, int> count;
+        F0R (i, n) {
+            int x; cin >> x;
+            count[x]++;
+        }
+        int mx = 0;
+        for (auto& x : count) mx = max(mx, x.second);
+
+        cout << min(sz(count) - (mx <= sz(count)), mx) << endl;
+    }
 
     return 0;
 }

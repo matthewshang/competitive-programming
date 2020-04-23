@@ -35,45 +35,22 @@ void pd(T first, U... rest) {
 #define dbg(...)
 #endif
 
-template <typename T>
-struct Seg {
-    const T ID = 0; T f(T a, T b) { return a + b; };
-    vector<int> seg; int n;
-    Seg(int _n) { n = _n; seg.assign(2 * n, ID); }
-    void update(int pos, T val) {
-        seg[pos += n] += val;
-        for (pos /= 2; pos; pos /= 2) 
-            seg[pos] = f(seg[2 * pos], seg[2 * pos + 1]);
-    }
-    T query(int l, int r) {
-        int ra = ID, rb = ID;
-        for (l += n, r += n + 1; l < r; l /= 2, r /= 2) {
-            if (l & 1) ra = f(ra, seg[l++]);
-            if (r & 1) rb = f(seg[--r], rb);
-        }
-        return f(ra, rb);
-    }
-};
-
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
 
-    int n; cin >> n;
-    vector<int> a(n); 
-    map<int, int> mp;
-    for (int& x : a) {
-        cin >> x;
-        if (mp.find(x) == mp.end()) {
-            mp[x] = mp.size();
-        }
+    int t; cin >> t;
+    while (t--) {
+        ll n, k; cin >> n >> k;
+        ll i = 0;
+        while (((i + 1) * (i + 2)) / 2 < k)
+            i++;
+        string s = "";
+        for (int j = 0; j < n; j++)
+            s += 'a';
+        s[n - i - 2] = 'b';
+        ll r = k - (i * (i + 1)) / 2;
+        s[n - r] = 'b';
+        cout << s << endl;
     }
-    for (int i = 0; i < n; i++)
-        a[i] = mp[a[i]];
-    
-    Seg<int> L(n), R(n);
-    for (int i = 0; i < n; i++) {
-        L.update(i, )
-    }
-
     return 0;
 }

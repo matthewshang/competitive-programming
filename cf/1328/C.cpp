@@ -35,44 +35,33 @@ void pd(T first, U... rest) {
 #define dbg(...)
 #endif
 
-template <typename T>
-struct Seg {
-    const T ID = 0; T f(T a, T b) { return a + b; };
-    vector<int> seg; int n;
-    Seg(int _n) { n = _n; seg.assign(2 * n, ID); }
-    void update(int pos, T val) {
-        seg[pos += n] += val;
-        for (pos /= 2; pos; pos /= 2) 
-            seg[pos] = f(seg[2 * pos], seg[2 * pos + 1]);
-    }
-    T query(int l, int r) {
-        int ra = ID, rb = ID;
-        for (l += n, r += n + 1; l < r; l /= 2, r /= 2) {
-            if (l & 1) ra = f(ra, seg[l++]);
-            if (r & 1) rb = f(seg[--r], rb);
-        }
-        return f(ra, rb);
-    }
-};
-
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
 
-    int n; cin >> n;
-    vector<int> a(n); 
-    map<int, int> mp;
-    for (int& x : a) {
-        cin >> x;
-        if (mp.find(x) == mp.end()) {
-            mp[x] = mp.size();
+    int t; cin >> t;
+    while (t--) {
+        int n; cin >> n;
+        string x; cin >> x;
+        string a = "", b = "";
+        bool flag = false;
+        for (int i = 0; i < n; i++) {
+            if (x[i] == '2') {
+                if (flag)
+                    a += '0', b += '2';
+                else
+                    a += '1', b += '1';
+            } else if (x[i] == '1') {
+                if (flag) {
+                    a += '0'; b += '1';
+                } else {
+                    a += '1'; b += '0';
+                    flag = true;
+                }
+            } else {
+                a += '0'; b += '0';
+            }
         }
-    }
-    for (int i = 0; i < n; i++)
-        a[i] = mp[a[i]];
-    
-    Seg<int> L(n), R(n);
-    for (int i = 0; i < n; i++) {
-        L.update(i, )
+        cout << a << endl << b << endl;
     }
 
     return 0;

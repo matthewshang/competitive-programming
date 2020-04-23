@@ -5,7 +5,6 @@ using vi = vector<int>;
 using vvi = vector<vector<int>>;
 using vll = vector<long long>;
 using pii = pair<int, int>;
-using pll = pair<long long, long long>;
 using vpi = vector<pair<int, int>>;
 
 #define F first
@@ -24,6 +23,12 @@ const ll INF = 1e18;
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
+
+    int t; cin >> t;
+    while (t--) {
+        int a, b, c, d; cin >> a >> b >> c >> d;
+        cout << b << " " << c << " " << c << nl;
+    }
 
     return 0;
 }

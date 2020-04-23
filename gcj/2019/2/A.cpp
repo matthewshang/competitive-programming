@@ -22,8 +22,31 @@ const char nl = '\n';
 const ll MOD = 1e9 + 7;
 const ll INF = 1e18;
 
+void solve() {
+    int n; cin >> n;
+    vi C(n), J(n);
+    F0R (i, n) cin >> C[i] >> J[i];
+
+    set<pii> s;
+    F0R (i, n) {
+        FOR (j, i + 1, n - 1) {
+            if ((C[i] >= C[j] && J[i] >= J[j]) || (C[i] <= C[j] && J[i] <= J[j])) continue;
+            int a = abs(C[i] - C[j]), b = abs(J[j] - J[i]);
+            int g = __gcd(a, b);
+            s.insert({a / g, b / g});
+        }
+    }
+    cout << s.size() + 1 << endl;
+}
+
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
+
+    int t; cin >> t;
+    FOR (i, 1, t) {
+        cout << "Case #" << i << ": ";
+        solve();
+    }
 
     return 0;
 }
