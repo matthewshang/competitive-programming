@@ -28,32 +28,26 @@ int main() {
     int t; cin >> t;
     while (t--) {
         int n; cin >> n;
-        vi p(n);
-        F0R (i, n) {
-            cin >> p[i];
-            p[i]--;
-        }
-        vi pos(n);
-        F0R (i, n) pos[p[i]] = i;
+        int d = (int)floor(log2(n));
+        int k = max(1 << (d - 1), (1 << d) - ((1 << (d + 1)) - 1 - n));
 
-        bool ok = true;
-        int m = n, i = 0;
-        while (i < n) {
-            int j = pos[i];
-            int mo = j;
-            i++; j++;
-            while (j < m) {
-                if (p[j] != p[pos[i]]) {
-                    ok = false;
-                    break;
-                }
-                i++; j++;
-            }
-            m = mo;
-            if (!ok) break;
+        cout << d << endl;
+
+        vi b;
+        while (d > 0) {
+            int next = n - k;
+            d--;
+            int next_k = max(1 << (d - 1), (1 << d) - ((1 << (d + 1)) - 1 - next));
+            b.pb(k - next_k);
+            n = next;
+            k = next_k;
         }
 
-        cout << (ok ? "Yes" : "No") << endl;
+        while (sz(b)) {
+            cout << b.back() << " ";
+            b.pop_back();
+        }
+        cout << endl;
     }
 
     return 0;

@@ -27,33 +27,35 @@ int main() {
 
     int t; cin >> t;
     while (t--) {
-        int n; cin >> n;
-        vi p(n);
-        F0R (i, n) {
-            cin >> p[i];
-            p[i]--;
-        }
-        vi pos(n);
-        F0R (i, n) pos[p[i]] = i;
+        int n, k; cin >> n >> k;
+        vi a(n);
+        F0R (i, n) cin >> a[i];
 
-        bool ok = true;
-        int m = n, i = 0;
+        set<int> uni;
+        F0R (i, n) uni.insert(a[i]);
+        if (uni.size() > k) {
+            cout << "-1\n";
+            continue;
+        }
+        vi u;
+        for (int x : uni) u.pb(x);
+        while (sz(u) < k) u.pb(a[0]);
+
+        vi b;
+        int i = 0, j = 0;
         while (i < n) {
-            int j = pos[i];
-            int mo = j;
-            i++; j++;
-            while (j < m) {
-                if (p[j] != p[pos[i]]) {
-                    ok = false;
-                    break;
-                }
-                i++; j++;
+            if (a[i] == u[j]) {
+                b.pb(a[i]);
+                i++;
+            } else {
+                b.pb(u[j]);
             }
-            m = mo;
-            if (!ok) break;
+            j = (j + 1) % k;
         }
 
-        cout << (ok ? "Yes" : "No") << endl;
+        cout << sz(b) << endl;
+        F0R (i, sz(b)) cout << b[i] << " ";
+        cout << endl;
     }
 
     return 0;

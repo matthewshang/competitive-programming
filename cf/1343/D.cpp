@@ -22,38 +22,36 @@ const char nl = '\n';
 const ll MOD = 1e9 + 7;
 const ll INF = 1e18;
 
+void solve() {
+    int n, k; cin >> n >> k;
+    vi a(n);
+    F0R (i, n) cin >> a[i];
+
+    vector<array<int, 3>> ev;
+    F0R (i, n / 2) {
+        int x = a[i], y = a[n - 1 - i];
+        ev.pb({min(1 + x, 1 + y), 1, i});
+        ev.pb({x + y, 2, i});
+        ev.pb({x + y, 3, i});
+        ev.pb({max(x + k, y + k), 4, i});
+    }
+    sort(all(ev));
+
+    int cost = n;
+    int ans = n - 2;
+    for (auto [t, y, i] : ev) {
+        cost += (y <= 2) ? -1 : 1;
+        ans = min(ans, cost);
+    }
+    cout << ans << endl;
+}
+
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
     int t; cin >> t;
     while (t--) {
-        int n; cin >> n;
-        vi p(n);
-        F0R (i, n) {
-            cin >> p[i];
-            p[i]--;
-        }
-        vi pos(n);
-        F0R (i, n) pos[p[i]] = i;
-
-        bool ok = true;
-        int m = n, i = 0;
-        while (i < n) {
-            int j = pos[i];
-            int mo = j;
-            i++; j++;
-            while (j < m) {
-                if (p[j] != p[pos[i]]) {
-                    ok = false;
-                    break;
-                }
-                i++; j++;
-            }
-            m = mo;
-            if (!ok) break;
-        }
-
-        cout << (ok ? "Yes" : "No") << endl;
+        solve();
     }
 
     return 0;

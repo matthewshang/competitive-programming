@@ -57,21 +57,14 @@ int main() {
     }
 
     vector<vpi> dist(n, vpi(m, {1e9, 1e9}));
-    // vector<vector<array<int, 2>>> dist(n, vector<array<int, 2>>(m, {INF, INF}));
-    // 0: left-right, 1: top-down
-    // dist[0][0] = {0, 0};
-    // vvi dist(n, vi(m, 1e9));
     deque<array<int, 3>> q;
     F0R (j, m) if (g[0][j] == '#') {
         dist[0][j].F = 0;
         q.push_front({0, j, 0});
         break;
     }
-    // q.push_front({{0, -1}, true});
-    // q.push_front({0, -1, 0});
     while (!q.empty()) {
         auto [i, j, dir] = q.front();
-        // cout << "HI " << i << " " << j << " " << dir << endl;
         q.pop_front();
 
         if (i == n - 1 && dir == 0) {

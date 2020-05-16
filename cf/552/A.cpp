@@ -25,36 +25,19 @@ const ll INF = 1e18;
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int t; cin >> t;
-    while (t--) {
-        int n; cin >> n;
-        vi p(n);
-        F0R (i, n) {
-            cin >> p[i];
-            p[i]--;
-        }
-        vi pos(n);
-        F0R (i, n) pos[p[i]] = i;
-
-        bool ok = true;
-        int m = n, i = 0;
-        while (i < n) {
-            int j = pos[i];
-            int mo = j;
-            i++; j++;
-            while (j < m) {
-                if (p[j] != p[pos[i]]) {
-                    ok = false;
-                    break;
-                }
-                i++; j++;
+    int n; cin >> n;
+    vvi g(100, vi(100, 0));
+    F0R (i, n) {
+        int x1, y1, x2, y2; cin >> x1 >> y1 >> x2 >> y2;
+        FOR (r, y1 - 1, y2 - 1) {
+            FOR (c, x1 - 1, x2 - 1) {
+                g[r][c] += 1;
             }
-            m = mo;
-            if (!ok) break;
         }
-
-        cout << (ok ? "Yes" : "No") << endl;
     }
+    int ans = 0;
+    F0R (i, 100) F0R (j, 100) ans += g[i][j];
+    cout << ans << endl;
 
     return 0;
 }

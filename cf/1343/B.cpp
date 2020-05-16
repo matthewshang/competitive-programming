@@ -28,32 +28,16 @@ int main() {
     int t; cin >> t;
     while (t--) {
         int n; cin >> n;
-        vi p(n);
-        F0R (i, n) {
-            cin >> p[i];
-            p[i]--;
-        }
-        vi pos(n);
-        F0R (i, n) pos[p[i]] = i;
-
-        bool ok = true;
-        int m = n, i = 0;
-        while (i < n) {
-            int j = pos[i];
-            int mo = j;
-            i++; j++;
-            while (j < m) {
-                if (p[j] != p[pos[i]]) {
-                    ok = false;
-                    break;
-                }
-                i++; j++;
-            }
-            m = mo;
-            if (!ok) break;
+        vi a(n);
+        if ((n / 2) % 2) {
+            cout << "NO\n";
+            continue;
         }
 
-        cout << (ok ? "Yes" : "No") << endl;
+        cout << "YES\n";
+        F0R (i, n / 2) cout << (2 * (i + 1)) << " ";
+        F0R (i, n / 2 - 1) cout << (2 * i + 1) << " ";
+        cout << (n + n / 2 - 1) << endl;
     }
 
     return 0;

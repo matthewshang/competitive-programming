@@ -73,7 +73,6 @@ int main() {
     string ans = "";
     F0R (i, n) {
         int d = dp[i][k];
-        // cout << "hi " << d << " "  << k << endl;
         ans += '0' + d;
         k -= cost[i][d];
     }

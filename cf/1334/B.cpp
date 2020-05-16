@@ -27,33 +27,21 @@ int main() {
 
     int t; cin >> t;
     while (t--) {
-        int n; cin >> n;
-        vi p(n);
-        F0R (i, n) {
-            cin >> p[i];
-            p[i]--;
-        }
-        vi pos(n);
-        F0R (i, n) pos[p[i]] = i;
-
-        bool ok = true;
-        int m = n, i = 0;
-        while (i < n) {
-            int j = pos[i];
-            int mo = j;
-            i++; j++;
-            while (j < m) {
-                if (p[j] != p[pos[i]]) {
-                    ok = false;
-                    break;
-                }
-                i++; j++;
+        int n, x; cin >> n >> x;
+        vi a(n);
+        F0R (i, n) cin >> a[i];
+        sort(all(a), greater<int>());
+        ll tot = 0;
+        int ans = 0;
+        while (ans < n) {
+            if (tot + a[ans] >= (ll)(ans + 1) * x) {
+                tot += a[ans];
+                ans++;
+            } else {
+                break;
             }
-            m = mo;
-            if (!ok) break;
         }
-
-        cout << (ok ? "Yes" : "No") << endl;
+        cout << ans << endl;
     }
 
     return 0;
