@@ -60,7 +60,7 @@ def ReadValues(line):
     raise Error(WRONG_NUM_TOKENS_ERROR(len(parts)))
   x = ParseInteger(parts[0])
   y = ParseInteger(parts[1])
-  print("{} {}".format(x, y), file=sys.stderr)
+  # print("{} {}".format(x, y), file=sys.stderr)
   if not -MAXX <= x <= MAXX:
     raise Error(OUT_OF_BOUNDS_ERROR(x))
   if not -MAXX <= y <= MAXX:
@@ -103,7 +103,7 @@ def RunCase(d, c, r, test_input=None, test_output_storage=None):
       raise Error(INVALID_LINE_ERROR)
     p = ReadValues(line)
     a = Answer(p, c, r)
-    print("{}".format(a), file=sys.stderr)
+    # print("{}".format(a), file=sys.stderr)
     Output(a)
     if a == CENTER:
       return
@@ -113,7 +113,7 @@ def RunCase(d, c, r, test_input=None, test_output_storage=None):
 def RunCases(d, minr, maxr, cases, test_input=None, test_output_storage=None):
   Output("{} {} {}".format(len(cases), minr, maxr))
   for i, (c, r) in enumerate(cases, 1):
-    print("center {}".format(c), file=sys.stderr)
+    # print("center {}".format(c), file=sys.stderr)
     assert minr <= r <= maxr and all(-MAXX + r <= x <= MAXX - r for x in c)
     try:
       RunCase(d, c, r, test_input=test_input,
