@@ -40,15 +40,6 @@ void solve() {
             q[i] = log2(q[i]);
         }
 
-
-        // dp(i, j) = prob of j yes using first i
-        // dp(i, j) = max(dp(i - 1, j) * (1 - p_i), dp(i - 1, j - 1) * p_i)
-        // j == 0: dp[i][j] = dp[i - 1][j] * (1 - q_i)
-        //       : log dp[i][j] = log dp[i - 1][j] + log (1 - q_i)
-        // 1 <= j < i: dp[i][j] = dp[i - 1][j - 1] * q_i
-        //           : log dp[i][j] = log dp[i - 1][j - 1] + log q_i
-        // i <= j <= K / 2: dp[i][j] = dp[i - 1][j] * (1 - q_i) + dp[i - 1][j - 1] * q_i
-        //                : log dp[i][j] = log (2^(log dp[i - 1][j] + log (1 - q_i)) + 2^(log dp[i - 1][j - 1] + log q_i))
         vector<vector<double>> dp(K + 1, vector<double>(K / 2 + 1));
         dp[0][0] = 0;
         FOR (i, 1, K) {
@@ -60,12 +51,6 @@ void solve() {
                 } else {
                     dp[i][j] = log2(pow(2.0, dp[i - 1][j] + r[i - 1]) + pow(2.0, dp[i - 1][j - 1] + q[i - 1]));
                 }
-                // dp[i][j] = 0;
-                // if (j < i) 
-                //     dp[i][j] = dp[i - 1][j] + (1 - q[i - 1]);
-                // if (j > 0)
-                //     dp[i][j] += dp[i - 1][j - 1] * q[i - 1];
-                // cout << i << ", " << j << ": " << pow(2.0, dp[i][j]) << endl;
             }
         }
         best = max(best, pow(2.0, dp[K][K / 2]));

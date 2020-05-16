@@ -38,7 +38,6 @@ int main() {
             p[i + 1][j] = p[i][j] + s[i][j];
             r[i + 1][j] = r[i][j] + p[i][j];
             s[i + 1][j] = s[i][j] + r[i][j];
-            // cout << i << ", " << j << ": " << p[i + 1][j] << " " << r[i + 1][j] << " " << s[i + 1][j] << endl;
         }
     }
 
