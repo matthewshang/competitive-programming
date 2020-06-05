@@ -25,5 +25,26 @@ const ll MOD = 1e9 + 7;
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
+    ll n, t; cin >> n >> t;
+    vi k(n);
+    F0R (i, n)
+        cin >> k[i];
+    
+    ll lo = 1, hi = 1e18 + 1;
+    while (lo < hi) {
+        ll mi = lo + (hi - lo) / 2;
+        ll p = 0;
+        F0R (i, n) {
+            p += mi / k[i];
+            if (p >= t)
+                break;
+        }
+        if (p >= t) {
+            hi = mi;
+        } else {
+            lo = mi + 1;
+        }
+    }
+    cout << lo << endl;
     return 0;
 }

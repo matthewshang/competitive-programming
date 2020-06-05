@@ -25,5 +25,29 @@ const ll MOD = 1e9 + 7;
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
+    int n; cin >> n;
+    vi x(n);
+    F0R (i, n)
+        cin >> x[i];
+    
+    vi ans(n, -1);
+    stack<int> st;
+    RFOR (i, n - 1, 0) {
+        while (!st.empty() && x[i] < x[st.top()]) {
+            ans[st.top()] = i + 1;
+            st.pop();
+        }
+        if (ans[i] == -1)
+            st.push(i);
+    }
+    while (!st.empty()) {
+        ans[st.top()] = 0;
+        st.pop();
+    }
+
+    F0R (i, n)
+        cout << ans[i] << " ";
+    cout << endl;
+
     return 0;
 }
