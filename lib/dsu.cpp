@@ -1,6 +1,6 @@
 struct DSU {
-    vector<int> par;
-    vector<int> sz;
+    vi par;
+    vi sz;
 
     DSU(int n) {
         par.resize(n);
