@@ -1,6 +1,6 @@
 struct DSU {
-    vector<int> par;
-    vector<int> sz;
+    vi par;
+    vi sz;
 
     DSU(int n) {
         par.resize(n);
@@ -9,6 +9,10 @@ struct DSU {
             par[i] = i;
             sz[i] = 1;
         }
+    }
+
+    int size(int x) {
+        return sz[find(x)];
     }
 
     int find(int x) {
