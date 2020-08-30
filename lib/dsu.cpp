@@ -1,31 +1,17 @@
-struct DSU {
-    vi par;
-    vi sz;
-
-    DSU(int n) {
-        par.resize(n);
-        sz.resize(n);
-        for (int i = 0; i < n; i++) {
-            par[i] = i;
-            sz[i] = 1;
-        }
-    }
-
-    int size(int x) {
-        return sz[find(x)];
-    }
-
+struct dsu {
+    vi par, szs;
+    dsu(int n) : par(n), szs(n, 1) { iota(all(par), 0); }
+    int size(int x) { return szs[find(x)]; }
     int find(int x) {
         if (x == par[x]) return x;
         return par[x] = find(par[x]);
     }
-
     bool join(int u, int v) {
         int a = find(u), b = find(v);
         if (a == b) return false;
-        if (sz[a] < sz[b]) swap(a, b);
+        if (szs[a] < szs[b]) swap(a, b);
         par[b] = a;
-        sz[a] += sz[b];
+        szs[a] += szs[b];
         return true;
     }
 };

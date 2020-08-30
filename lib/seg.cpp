@@ -1,21 +1,31 @@
-// Source: Based on KACTL and bqi343
-template <typename T>
+// Source: cp-algorithms
 struct Seg {
-    const T ID = 0;
-    T f(T a, T b) { return a + b; } // f should be associative
-    vector<T> seg; int n;
-    Seg(int _n) { n = _n; seg.assign(2 * n, ID); }
-    void update(int pos, T val) {
-        seg[pos += n] = val;
-        for (pos /= 2; pos; pos /= 2) 
-            seg[pos] = f(seg[2 * pos], seg[2 * pos + 1]);
-    }
-    T query(int l, int r) { // interval [l, r]
-        T ra = ID, rb = ID;
-        for (l += n, r += n + 1; l < r; l /= 2, r /= 2) {
-            if (l & 1) ra = f(ra, seg[l++]);
-            if (r & 1) rb = f(seg[--r], rb);
+    int n;
+    vector<ll> seg;
+    Seg(int n) : n(n), seg(4 * n) {}
+    void update(int pos, int val, int idx, int L, int R) {
+        if (L == R) {
+            seg[idx] = val;
+        } else {
+            int M = (L + R) / 2;
+            if (pos <= M)
+                update(pos, val, idx * 2, L, M);
+            else
+                update(pos, val, idx * 2 + 1, M + 1, R);
+            seg[idx] = seg[idx * 2] + seg[idx * 2 + 1];
         }
-        return f(ra, rb);
+    }
+    void update(int pos, int val) {
+        update(pos, val, 1, 0, n - 1);
+    }
+    ll query(int lo, int hi, int idx, int L, int R) {
+        if (lo > hi) return 0;
+        if (L == lo && hi == R) return seg[idx];
+        int M = (L + R) / 2;
+        return query(lo, min(hi, M), idx * 2, L, M) + 
+               query(max(lo, M + 1), hi, idx * 2 + 1, M + 1, R);
+    }
+    ll query(int lo, int hi) {
+        return query(lo, hi, 1, 0, n - 1);
     }
 };
