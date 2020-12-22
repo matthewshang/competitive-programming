@@ -68,29 +68,55 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
+void setIO(string s) {
+    freopen((s + ".in").c_str(), "r", stdin);
+    freopen((s + ".out").c_str(), "w", stdout);
+}
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef LOCAL
+    setIO("fortmoo");
+    #endif
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
-    }
-
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
+    int n, m; cin >> n >> m;
+    vector<string> g(n);
+    F0R (i, n) cin >> g[i];
+    
+    vvi pre_col(m, vi(n + 1));
+    F0R (j, m) {
+        F0R (i, n) {
+            pre_col[j][i + 1] += pre_col[j][i];
+            if (g[i][j] == 'X') {
+                pre_col[j][i + 1]++;
             }
         }
     }
-    cout << dp[x] << nl;
+
+    auto check_col = [&](int c, int r1, int r2) -> bool {
+        return pre_col[c][r2 + 1] - pre_col[c][r1] == 0;
+    };
+
+    int max_area = 0;
+    F0R (row_top, n) {
+        FOR (row_bot, row_top, n) {
+            int last_col = -1;
+            F0R (col, m) {
+                if (g[row_bot][col] == 'X' || g[row_top][col] == 'X') {
+                    last_col = -1;
+                } else {
+                    if (check_col(col, row_top, row_bot)) {
+                        if (last_col == -1) {
+                            last_col = col;
+                        }
+                        int area = (row_bot - row_top + 1) * (col - last_col + 1);
+                        max_area = max(max_area, area);
+                    }
+                }
+            }
+        }
+    }
+    cout << max_area << nl;
 
     return 0;
 }

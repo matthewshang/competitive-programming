@@ -68,29 +68,70 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
+struct Seg {
+    int n;
+    vector<ll> seg;
+    Seg(int n) : n(n), seg(4 * n) {}
+    void update(int pos, ll val, int idx, int L, int R) {
+        if (L == R) {
+            seg[idx] = max(seg[idx], val);
+        } else {
+            int M = (L + R) / 2;
+            if (pos <= M)
+                update(pos, val, idx * 2, L, M);
+            else
+                update(pos, val, idx * 2 + 1, M + 1, R);
+            seg[idx] = max(seg[idx * 2], seg[idx * 2 + 1]);
+        }
+    }
+    void update(int pos, ll val) {
+        update(pos, val, 1, 0, n - 1);
+    }
+    ll query(int lo, int hi, int idx, int L, int R) {
+        if (lo > hi) return 0;
+        if (L == lo && hi == R) return seg[idx];
+        int M = (L + R) / 2;
+        return max(query(lo, min(hi, M), idx * 2, L, M), 
+               query(max(lo, M + 1), hi, idx * 2 + 1, M + 1, R));
+    }
+    ll query(int lo, int hi) {
+        return query(lo, hi, 1, 0, n - 1);
+    }
+};
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
+    int n; cin >> n;
+    vector<int> a(n);
+    vector<int> b(n);
+    vector<int> p(n);
+    vector<int> cmpr;
     for (int i = 0; i < n; i++) {
-        cin >> c[i];
+        cin >> a[i] >> b[i] >> p[i];
+        cmpr.push_back(a[i]);
+        cmpr.push_back(b[i]);
+    }
+    sort(all(cmpr));
+    cmpr.resize(unique(all(cmpr)) - cmpr.begin());
+    for (int i = 0; i < n; i++) {
+        a[i] = lower_bound(all(cmpr), a[i]) - cmpr.begin() + 1;
+        b[i] = lower_bound(all(cmpr), b[i]) - cmpr.begin() + 1;
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
-            }
-        }
+    vector<pii> ord(n);
+    for (int i = 0; i < n; i++) {
+        ord[i] = { b[i], i };
     }
-    cout << dp[x] << nl;
+    sort(all(ord));
+
+    int X = cmpr.size();
+    Seg dp(X + 1);
+    for (int i = 0; i < n; i++) {
+        int j = ord[i].second;
+        dp.update(b[j], dp.query(0, a[j] - 1) + p[j]);
+    }
+    cout << dp.query(0, X) << nl;
 
     return 0;
 }

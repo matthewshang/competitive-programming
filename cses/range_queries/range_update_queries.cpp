@@ -68,29 +68,67 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
-
+struct lazy_seg {
+    int n;
+    vector<ll> seg, lazy;
+    lazy_seg(int n) : n(n), seg(4 * n), lazy(4 * n) {}
+    void push(int v, int l, int r) {
+        // seg[v] += (r - l + 1) * lazy[v];
+        seg[v] += lazy[v];
+        if (l != r) F0R (i, 2) {
+            lazy[v * 2 + i] += lazy[v];
+        }
+        lazy[v] = 0;
+    }
+    void range_update(int lo, int hi, int inc, int v, int l, int r) {
+        push(v, l, r);
+        if (hi < l || lo > r) return;
+        if (lo <= l && r <= hi) {
+            lazy[v] += inc;
+            push(v, l, r);
+        } else {
+            int m = (l + r) / 2;
+            range_update(lo, hi, inc, v * 2, l, m);
+            range_update(lo, hi, inc, v * 2 + 1, m + 1, r);
+            seg[v] = min(seg[v * 2], seg[v * 2 + 1]);
+        }
+    }
+    void range_update(int lo, int hi, int inc) {
+        range_update(lo, hi, inc, 1, 0, n - 1);
+    }
+    ll point_query(int pos, int v, int l, int r) {
+        push(v, l, r);
+        if (l == r) return seg[v];
+        int m = (l + r) / 2;
+        if (pos <= m)
+            return point_query(pos, v * 2, l, m);
+        else
+            return point_query(pos, v * 2 + 1, m + 1, r);
+    }
+    ll point_query(int pos) {
+        return point_query(pos, 1, 0, n - 1);
+    }
+};
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
+    int n, q; cin >> n >> q;
+    lazy_seg seg(n);
     for (int i = 0; i < n; i++) {
-        cin >> c[i];
+        int x; cin >> x;
+        seg.range_update(i, i, x);
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
-            }
+    while (q--) {
+        int t; cin >> t;
+        if (t == 1) {
+            int a, b, u; cin >> a >> b >> u;
+            seg.range_update(a - 1, b - 1, u);
+        } else {
+            int k; cin >> k;
+            cout << seg.point_query(k - 1) << nl;
         }
     }
-    cout << dp[x] << nl;
 
     return 0;
 }

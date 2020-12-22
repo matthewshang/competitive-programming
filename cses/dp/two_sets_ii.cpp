@@ -69,28 +69,36 @@ template<class H, class... T> void DBG(H h, T... t) {
 #endif
 
 const ll MOD = 1e9 + 7;
-const int MX = 1e6;
+const ll INV2 = (MOD + 1) / 2;
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
+    int n; cin >> n;
+    int sum = n * (n + 1) / 2;
+    if (sum % 2 == 1) {
+        cout << 0 << nl;
+        return 0;
     }
+    sum /= 2;
 
-    vector<ll> dp(x + 1);
+    vector<ll> dp(sum + 1);
+    vector<ll> new_dp(sum + 1);
     dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= sum; j++) {
+            new_dp[j] = dp[j];
+            if (j >= i) {
+                new_dp[j] += dp[j - i];
+                if (new_dp[j] > MOD) {
+                    new_dp[j] -= MOD;
+                }
             }
         }
+        swap(dp, new_dp);
     }
-    cout << dp[x] << nl;
+
+    cout << (dp[sum] * INV2 % MOD) << nl;
 
     return 0;
 }
