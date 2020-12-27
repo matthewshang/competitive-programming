@@ -68,29 +68,79 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
+struct BIT { // Operation must be reversible
+    vector<ll> bit;
+    BIT(int n) : bit(n) {}
+    ll query(int pos) { // sum from [0, pos]
+        ll ans = 0;
+        for (pos++; pos > 0; pos &= pos - 1) ans += bit[pos - 1];
+        return ans;
+    }
+    ll query(int l, int r) { // sum from [l, r]
+        return query(r) - query(l - 1);
+    }
+    void update(int pos, int delta) { // a[pos] += delta; 
+        for (; pos < sz(bit); pos |= pos + 1) bit[pos] += delta;
+    }
+};
+
+void setIO(string s) {
+    freopen((s + ".in").c_str(), "r", stdin);
+    freopen((s + ".out").c_str(), "w", stdout);
+}
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
+#ifndef LOCAL
+    setIO("promote");
+#endif
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
+    int n; cin >> n;
+    vi prof(n);
+    F0R (i, n) cin >> prof[i];
+    vi u = prof;
+    sort(all(u));
+    u.resize(unique(all(u)) - u.begin());
+    F0R (i, n) {
+        prof[i] = lower_bound(all(u), prof[i]) - u.begin();
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
-            }
+    vvi adj(n);
+    F0R (i, n - 1) {
+        int par; cin >> par; par--;
+        adj[i + 1].pb(par);
+        adj[par].pb(i + 1);
+    }
+
+    vpi pro;
+    vector<array<int, 4>> queries;
+    function<void(int, int)> dfs = [&](int v, int p) {
+        int tin = sz(pro);
+        pro.pb({ -prof[v], tin });
+        trav (to, adj[v]) if (to != p) dfs(to, v);
+        int tout = sz(pro) - 1;
+        queries.pb({ -prof[v], tin, tout, v });
+    };
+    dfs(0, -1);
+    sort(all(pro));
+    sort(all(queries));
+
+    vi res(n);
+    BIT B(n);
+    int j = 0;
+    F0R (i, n) {
+        int mx = queries[i][0];
+        int L = queries[i][1];
+        int R = queries[i][2];
+        int v = queries[i][3];
+        while (j < n && pro[j].F < mx) {
+            B.update(pro[j].S, 1);
+            j++;
         }
+        res[v] = B.query(L + 1, R);
     }
-    cout << dp[x] << nl;
+
+    trav (ans, res) cout << ans << nl;
 
     return 0;
 }

@@ -68,29 +68,24 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
-
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
+    int n; cin >> n;
+    vector<int> x(n);
     for (int i = 0; i < n; i++) {
-        cin >> c[i];
+        cin >> x[i];
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
-            }
+    vector<int> lis;
+    for (int i = 0; i < n; i++) {
+        auto it = lower_bound(all(lis), x[i]);
+        if (it == lis.end()) {
+            lis.push_back(x[i]);
+        } else {
+            *it = x[i];
         }
     }
-    cout << dp[x] << nl;
-
+    cout << sz(lis) << nl;
     return 0;
 }

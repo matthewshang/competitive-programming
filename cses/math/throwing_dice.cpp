@@ -68,29 +68,57 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
-    }
+    const ll MOD = 1e9 + 7;
+    using mat = array<array<ll, 6>, 6>;
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
+    auto mul = [&](mat a, mat b) -> mat {
+        mat c{};
+        for (int i = 0; i < sz(a); i++) {
+            for (int j = 0; j < sz(a); j++) {
+                for (int k = 0; k < sz(a); k++) {
+                    c[i][j] = (c[i][j] + a[i][k] * b[k][j] % MOD) % MOD;
+                }
             }
         }
+        return c;
+    };
+    auto binpow = [&](mat a, ll k) -> mat {
+        mat x{};
+        for (int i = 0; i < sz(x); i++) {
+            x[i][i] = 1;
+        }
+        while (k) {
+            if (k % 2) x = mul(x, a); 
+            a = mul(a, a);
+            k /= 2;
+        }
+        return x;
+    };
+
+    ll n; cin >> n;
+    array<int, 6> v = {{ 32, 16, 8, 4, 2, 1 }};
+    if (n <= 6) {
+        cout << v[6 - n] << nl;
+    } else {
+        mat m{};
+        for (int i = 0; i < 6; i++) {
+            m[0][i] = 1;
+        }
+        for (int i = 0; i < 5; i++) {
+            m[i + 1][i] = 1;
+        }
+        m = binpow(m, n - 6);
+
+        ll res = 0;
+        for (int i = 0; i < 6; i++) {
+            res = (res + m[0][i] * v[i] % MOD) % MOD;
+        }
+        cout << res << nl;
     }
-    cout << dp[x] << nl;
 
     return 0;
 }

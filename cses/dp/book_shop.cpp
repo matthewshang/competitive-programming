@@ -68,29 +68,29 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
-
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
     int n, x; cin >> n >> x;
-    vector<int> c(n);
+    vector<int> h(n);
+    vector<int> s(n);
     for (int i = 0; i < n; i++) {
-        cin >> c[i];
+        cin >> h[i];
+    }
+    for (int i = 0; i < n; i++) {
+        cin >> s[i];
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
+    vector<vector<int>> dp(n + 1, vector<int>(x + 1));
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= x; j++) {
+            if (j - h[i - 1] >= 0) {
+                dp[i][j] = max(dp[i][j], dp[i - 1][j - h[i - 1]] + s[i - 1]);
             }
+            dp[i][j] = max(dp[i][j], dp[i - 1][j]);
         }
     }
-    cout << dp[x] << nl;
-
+    int pages = *max_element(dp[n].begin(), dp[n].end());
+    cout << pages << nl;
     return 0;
 }

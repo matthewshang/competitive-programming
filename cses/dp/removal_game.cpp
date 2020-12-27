@@ -68,29 +68,46 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
-
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
+    int n; cin >> n;
+    vector<int> x(n);
     for (int i = 0; i < n; i++) {
-        cin >> c[i];
+        cin >> x[i];
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
+    vector<vector<ll>> dp(n, vector<ll>(n));
+    vector<vector<int>> take(n, vector<int>(n));
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = x[i];
+        take[i][i] = i;
+    }
+    for (int i = 0; i < n - 1; i++) {
+        dp[i][i + 1] = max(x[i], x[i + 1]);
+        take[i][i + 1] = x[i] > x[i + 1] ? i : i + 1;
+    }
+    for (int l = 2; l < n; l++) {
+        for (int i = 0; i < n - l; i++) {
+            ll tl = 0;
+            {
+                // take x[i]
+                int L = (take[i + 1][i + l] == i + 1) ? i + 2 : i + 1;
+                int R = (take[i + 1][i + l] == i + l) ? i + l - 1 : i + l;
+                tl = x[i] + dp[L][R];
             }
+            ll tr = 0;
+            {
+                // take x[i + l]
+                int L = (take[i][i + l - 1] == i) ? i + 1 : i;
+                int R = (take[i][i + l - 1] == i + l - 1) ? i + l - 2 : i + l - 1;
+                tr = x[i + l] + dp[L][R];
+            }
+            dp[i][i + l] = max(tl, tr);
+            take[i][i + l] = tl > tr ? i : i + l;
         }
     }
-    cout << dp[x] << nl;
+    cout << dp[0][n - 1] << nl;
 
     return 0;
 }

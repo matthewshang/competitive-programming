@@ -68,29 +68,78 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
+const long long MOD = 1e9 + 7;
 
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
+    int n, m; cin >> n >> m;
+    vector<int> x(n + 1);
     for (int i = 0; i < n; i++) {
-        cin >> c[i];
+        cin >> x[i + 1];
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
-            }
+    int know = -1;
+    for (int i = 1; i <= n; i++) {
+        if (x[i] != 0) {
+            know = i;
+            break;
         }
     }
-    cout << dp[x] << nl;
+
+    vector<vector<long long>> dp(n + 2, vector<long long>(m + 2));
+    if (know == -1) {
+        for (int i = 1; i <= m; i++) {
+            dp[1][i] = 1;
+        }
+        know = 1;
+    } else {
+        dp[know][x[know]] = 1;
+    }
+
+    for (int i = know; i < n; i++) {
+        if (x[i + 1] == 0) {
+            for (int j = 1; j <= m; j++) {
+                dp[i + 1][j] = dp[i][j - 1] + dp[i][j] + dp[i][j + 1];
+                dp[i + 1][j] %= MOD;
+            }
+        } else {
+            for (int j = -1; j <= 1; j++) {
+                dp[i + 1][x[i + 1]] += dp[i][x[i + 1] + j];
+            }
+            dp[i + 1][x[i + 1]] %= MOD;
+        }
+    }
+    for (int i = know; i >= 1; i--) {
+        if (x[i - 1] == 0) {
+            for (int j = 1; j <= m; j++) {
+                dp[i - 1][j] = dp[i][j - 1] + dp[i][j] + dp[i][j + 1];
+                dp[i - 1][j] %= MOD;
+            }
+        } else {
+            for (int j = -1; j <= 1; j++) {
+                dp[i - 1][x[i - 1]] += dp[i][x[i - 1] + j];
+            }
+            dp[i - 1][x[i - 1]] %= MOD;
+        }
+    }
+
+    long long L = 1;
+    if (know != 1 || n == 1) {
+        L = 0;
+        for (int i = 1; i <= m; i++) {
+            L = (L + dp[1][i]) % MOD;
+        }
+    }
+    long long R = 1;
+    if (know != n) {
+        R = 0;
+        for (int i = 1; i <= m; i++) {
+            R = (R + dp[n][i]) % MOD;
+        }
+    }
+    long long res = (L * R) % MOD;
+    cout << res << nl;
 
     return 0;
 }

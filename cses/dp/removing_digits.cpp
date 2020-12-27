@@ -68,29 +68,29 @@ template<class H, class... T> void DBG(H h, T... t) {
 	#define dbg(...) 0
 #endif
 
-const ll MOD = 1e9 + 7;
-const int MX = 1e6;
-
 int main() {
     ios::sync_with_stdio(false); cin.tie(NULL);
 
-    int n, x; cin >> n >> x;
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
+    int n; cin >> n;
+    vector<vector<bool>> has_digit(n + 1, vector<bool>(10));
+    for (int x = 1; x <= n; x++) {
+        int X = x;
+        while (X > 0) {
+            has_digit[x][X % 10] = true;
+            X /= 10;
+        }
     }
 
-    vector<ll> dp(x + 1);
-    dp[0] = 1;
-    for (int j = 0; j < n; j++) {
-        for (int i = 1; i <= x; i++) {
-            if (i - c[j] >= 0) {
-                dp[i] += dp[i - c[j]];
-                dp[i] %= MOD;
+    vector<int> dp(n + 1, 1e9);
+    dp[0] = 0;
+    for (int x = 0; x <= n; x++) {
+        for (int d = 0; d < 10; d++) {
+            int y = x + d;
+            if (y <= n && has_digit[y][d]) {
+                dp[y] = min(dp[y], dp[x] + 1);
             }
         }
     }
-    cout << dp[x] << nl;
-
+    cout << dp[n] << nl;
     return 0;
 }
