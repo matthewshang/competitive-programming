@@ -12,11 +12,14 @@ string to_string(bool b) {
 }
 string to_string(vector<bool> v) { 
     string res = "{"; 
-    F0R (i, sz(v)) res += char('0' + v[i]); 
+    for (int i = 0; i < int(v.size()); i++)
+        res += char('0' + v[i]);
     res += "}"; return res; 
 }
 template <size_t SZ> string to_string(bitset<SZ> b) { 
-    string res = ""; F0R (i, SZ) res += char('0' + b[i]); 
+    string res = "";
+    for (int i = 0; i < int(SZ); i++)
+        res += char('0' + b[i]);
     return res; 
 }
 template<class A, class B> string to_string(pair<A, B> p);
@@ -29,7 +32,7 @@ template<class T> string to_string(T& v) {
     res += "}"; return res;
 }
 template<class A, class B> string to_string(pair<A, B> p) { 
-    return "(" + to_string(p.F) + ", " + to_string(p.S) + ")"; 
+    return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; 
 }
 
 void DBG() { cerr << "]" << endl; }
