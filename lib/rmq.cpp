@@ -1,19 +1,27 @@
 template <typename T>
 struct RMQ {
     vector<vector<T>> st;
-    void build(vector<T>& v) {
-        int t = __lg(sz(v));
+
+    RMQ(const vector<T>& v) {
+        build(v);
+    }
+
+    void build(const vector<T>& v) {
+        const int t = __lg(v.size());
         st.resize(t + 1);
-        st[0].resize(sz(v));
-        F0R (i, sz(v)) st[0][i] = v[i];
-        F0R (l, t) {
-            int m = sz(v) - (1 << (l + 1)) + 1;
+        st[0].resize(v.size());
+        for (int i = 0; i < int(v.size()); i++)
+            st[0][i] = v[i];
+        for (int l = 0; l < t; l++) {
+            int m = int(v.size()) - (1 << (l + 1)) + 1;
             st[l + 1].resize(m);
-            F0R (i, m) st[l + 1][i] = min(st[l][i], st[l][i + (1 << l)]);
+            for (int i = 0; i < m; i++)
+                st[l + 1][i] = max(st[l][i], st[l][i + (1 << l)]);
         }
     }
+
     T query(int l, int r) { // [l, r]
         int t = __lg(r - l + 1);
-        return min(st[t][l], st[t][r - (1 << t) + 1]);
+        return max(st[t][l], st[t][r - (1 << t) + 1]);
     }
 };
