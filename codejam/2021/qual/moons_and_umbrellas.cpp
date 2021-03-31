@@ -12,8 +12,13 @@ int main() {
 
         int n = S.size();
         vector<array<int, 2>> dp(n + 1, { 1000000, 1000000 });
-        dp[0] = { 0, 0 };
-        for (int i = 1; i <= n; i++) {
+        if (S[0] == '?' || S[0] == 'C') {
+            dp[1][0] = 0;
+        }
+        if (S[0] == '?' || S[0] == 'J') {
+            dp[1][1] = 0;
+        }
+        for (int i = 2; i <= n; i++) {
             char cur = S[i - 1];
             if (cur == '?' || cur == 'C') {
                 dp[i][0] = min(dp[i - 1][0], dp[i - 1][1] + Y);
