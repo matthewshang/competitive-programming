@@ -2,6 +2,10 @@
 
 using namespace std;
 
+/* Date: 2021-03-30
+ * Source: Rocky Mountains 2020
+ */
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);

@@ -2,6 +2,10 @@
 
 using namespace std;
 
+/* Date: 2021-04-06
+ * Source: UKIEPC 2015
+ */
+
 struct pt {
     int64_t x, y;
 };

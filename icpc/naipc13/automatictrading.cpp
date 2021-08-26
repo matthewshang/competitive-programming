@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/* Binary search on hashes of substrings. */
+/* Date: 2021-08-01
+ * Source: NAIPC 2013
+ * Summary: Binary search on hashes of substrings.
+ */
 
 using Hash = array<int64_t, 2>;
 constexpr Hash P = {53, 59};
